@@ -20,10 +20,10 @@ make run
 Ou à la main :
 
 ```bash
-gcc -O0 -Wall -o associativity associativity.c
-gcc -O0 -Wall -o banking banking.c -lm
-./associativity
-./banking
+gcc -O0 -Wall -o exo1 exo1.c
+gcc -O0 -Wall -o exo2 exo2.c -lm
+./exo1
+./exo2
 ```
 
 Nettoyer : `make clean`.
@@ -32,8 +32,8 @@ Nettoyer : `make clean`.
 
 | Fichier | Contenu attendu |
 |---|---|
-| `answer_associativity.txt` | `746552` |
-| `answer_banking.txt` | `-4396803930182068517325088235103664583272782888960.000000` |
+| `EXO1.txt` | `746552` |
+| `EXO2.txt` | `-4396803930182068517325088235103664583272782888960.000000` |
 
 (Obtenus sur Linux x86-64, GCC 13.3.0, `-O0`.)
 
