@@ -1,0 +1,25 @@
+name: Reproduce answers
+
+on: push
+
+permissions:
+  contents: write
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tp1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t rep-lab2 .
+
+      - name: Run container
+        run: docker run --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/out rep-lab2
+
+      - name: Show answers
+        run: cat answer_associativity.txt answer_banking.txt
