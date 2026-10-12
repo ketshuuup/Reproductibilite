@@ -17,9 +17,16 @@ int main(void) {
         }
     }
 
-    FILE *f = fopen("/home/amine/Desktop/Reproductibilite/tp1/EXO1.txt", "w"); //BIEN SURE TU MODIFIE LE CHEMIN FAIT PAS LE CON AUSSI
+    /* dossier de sortie : variable d'environnement OUT_DIR (défaut : dossier courant) */
+    const char *out_dir = getenv("OUT_DIR");
+    if (out_dir == NULL || out_dir[0] == '\0') out_dir = ".";
+
+    char path[1024];
+    snprintf(path, sizeof path, "%s/answer_associativity.txt", out_dir);
+
+    FILE *f = fopen(path, "w");
     if (f == NULL) {
-        perror("answer_associativity.txt");
+        perror(path);
         return 1;
     }
     fprintf(f, "%d\n", marche);

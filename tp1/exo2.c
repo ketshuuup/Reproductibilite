@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 int main(void) {
@@ -7,13 +8,20 @@ int main(void) {
         gain = gain * i - 1;
     }
 
-    FILE *f = fopen("/home/amine/Desktop/Reproductibilite/tp1/EXO2.txt", "w"); //ICI AUSSI TU MODIFIE LE CHEMIN SELON TON ORDIE
+    /* dossier de sortie : variable d'environnement OUT_DIR (defaut : dossier courant) */
+    const char *out_dir = getenv("OUT_DIR");
+    if (out_dir == NULL || out_dir[0] == '\0') out_dir = ".";
+    char path[1024];
+    snprintf(path, sizeof path, "%s/answer_banking.txt", out_dir);
+
+    FILE *f = fopen(path, "w");
     if (f == NULL) {
-        perror("EXO2.txt");
+        perror(path);
         return 1;
     }
     fprintf(f, "%f\n", gain);
     fclose(f);
 
+    printf("FINALE : %f (ecrit dans %s)\n", gain, path);
     return 0;
 }
