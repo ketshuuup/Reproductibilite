@@ -1,0 +1,9 @@
+property,type,percentage
+assoc_add,float,74.5608
+assoc_add,double,74.5554
+assoc_mul,float,65.0853
+assoc_mul,double,65.1625
+distrib,float,64.7025
+distrib,double,64.7625
+inverse,float,84.7045
+inverse,double,84.6556
