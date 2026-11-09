@@ -1,4 +1,4 @@
-import argparse, csv, platform, random, subprocess, sys
+import argparse, csv, os, platform, random, subprocess, sys
 from pathlib import Path
 from jinja2 import Template
 
@@ -6,7 +6,9 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--sample", default="configs/sample.csv")
 ap.add_argument("--runs", type=int, default=5)
 ap.add_argument("--only", nargs="*", default=None, help="config_id à exécuter")
+ap.add_argument("--out", default=None)
 a = ap.parse_args()
+CC = os.environ.get("CC", "gcc")
 
 ARCH = {"x86_64": "X86_64", "aarch64": "Arm64", "arm64": "Arm64"}
 machine = platform.machine()
@@ -23,16 +25,16 @@ OPT = {"O0": ["-O0"], "O2": ["-O2"], "O2FastMath": ["-O2", "-ffast-math"]}
 template = Template(Path("templates/assoc.c.jinja").read_text())
 Path("build").mkdir(exist_ok=True)
 Path("results").mkdir(exist_ok=True)
-gcc_version = subprocess.run(["gcc", "-dumpfullversion"], capture_output=True, text=True).stdout.strip()
+gcc_version = subprocess.run([CC, "-dumpfullversion"], capture_output=True, text=True).stdout.strip()
 
 def build_c(ctype, prop, opt):
     name = f"build/{prop}_{ctype}_{opt}"
     lhs, rhs = PROPERTIES[prop]
     Path(name + ".c").write_text(template.render(ctype=ctype, lhs=lhs, rhs=rhs))
-    subprocess.run(["gcc", *OPT[opt], "-o", name, name + ".c"], check=True)
+    subprocess.run([CC, *OPT[opt], "-o", name, name + ".c"], check=True)
     return name
 
-out_path = Path(f"results/results_{machine}.csv")
+out_path = Path(a.out or f"results/results_{machine}.csv")
 rows = []
 with open(a.sample) as f:
     configs = list(csv.DictReader(f))

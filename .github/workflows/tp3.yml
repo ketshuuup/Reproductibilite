@@ -1,0 +1,81 @@
+name: tp3-results
+on:
+  workflow_dispatch:
+  push:
+    paths: ["tp3/**", ".github/workflows/tp3.yml"]
+permissions:
+  contents: write
+
+jobs:
+  sample:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: pip install -r tp3/requirements.txt
+      - name: Sample
+        working-directory: tp3
+        run: python sample.py fm/experiment.uvl --size 100 --seed 1 --include configs/p*.csvconf -o /tmp/sample_ci.csv
+      - name: Same sample as the committed one?
+        working-directory: tp3
+        run: diff /tmp/sample_ci.csv configs/sample.csv && echo "SAME SAMPLE" || echo "DIFFERENT SAMPLE"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sample
+          path: /tmp/sample_ci.csv
+
+  run:
+    needs: sample
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.14"]
+        gcc-version: ["12", "14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: sudo apt-get update && sudo apt-get install -y gcc-${{ matrix.gcc-version }}
+      - run: pip install Jinja2
+      - uses: actions/download-artifact@v4
+        with:
+          name: sample
+          path: /tmp/sample
+      - name: Run all variants
+        working-directory: tp3
+        env:
+          CC: gcc-${{ matrix.gcc-version }}
+        run: python run_sample.py --sample /tmp/sample/sample_ci.csv --runs 5 --out results/part_py${{ matrix.python-version }}_gcc${{ matrix.gcc-version }}.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: results-py${{ matrix.python-version }}-gcc${{ matrix.gcc-version }}
+          path: tp3/results/part_*.csv
+
+  collect:
+    needs: run
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: results-*
+          merge-multiple: true
+          path: parts
+      - name: Merge the CSV files
+        run: |
+          mkdir -p tp3/results
+          awk 'FNR==1 && NR!=1{next}1' parts/*.csv > tp3/results/results_ci.csv
+          cp tp3/results/results_ci.csv tp3/results/results_ci_attempt${{ github.run_attempt }}.csv
+          wc -l tp3/results/results_ci.csv
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tp3/results/results_ci*.csv
+          git diff --staged --quiet || git commit -m "TP3: results from GitHub Actions"
+          git pull --rebase
+          git push

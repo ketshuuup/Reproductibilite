@@ -1,2 +1,5 @@
 cmake-build-debug/
 .idea/
+.venv/
+.venv/
+tp3/build/
