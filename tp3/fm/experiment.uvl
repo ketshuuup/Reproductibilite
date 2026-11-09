@@ -1,0 +1,56 @@
+features
+    Experiment
+        mandatory
+            Language
+                alternative
+                    LangC
+                    LangPython
+            NumType
+                alternative
+                    Float32
+                    Float64
+            Generator
+                alternative
+                    GenRandC
+                    GenPyNative
+                    GenPyCStyle
+            Interval
+                alternative
+                    Int_0_1
+                    Int_0_1000
+                    Int_m1_1
+                    Int_m1000_1000
+                    Int_m1e15_1e15
+            Repetitions
+                alternative
+                    Rep100
+                    Rep1000
+                    Rep100000
+                    Rep1000000
+                    Rep10000000
+            Seed
+                alternative
+                    Seed1
+                    Seed2
+                    Seed3
+                    Seed42
+                    SeedNotFixed
+            Property
+                alternative
+                    AssocAdd
+                    AssocMul
+                    Distrib
+                    Inverse
+        optional
+            Optimization
+                alternative
+                    O0
+                    O2
+                    O2FastMath
+
+constraints
+    LangC => GenRandC
+    LangPython => !GenRandC
+    LangPython => Float64
+    LangC => Optimization
+    LangPython => !Optimization
