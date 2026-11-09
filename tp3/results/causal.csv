@@ -1,0 +1,41 @@
+experiment,variant,seed,percentage
+"compiler flag (C, float, [0,1])",-O2,1,74.5608
+"compiler flag (C, float, [0,1])",-O2,2,74.6885
+"compiler flag (C, float, [0,1])",-O2,3,74.574
+"compiler flag (C, float, [0,1])",-O2,4,74.6619
+"compiler flag (C, float, [0,1])",-O2,5,74.586
+"compiler flag (C, float, [0,1])",-O2 -ffast-math,1,100.0
+"compiler flag (C, float, [0,1])",-O2 -ffast-math,2,100.0
+"compiler flag (C, float, [0,1])",-O2 -ffast-math,3,100.0
+"compiler flag (C, float, [0,1])",-O2 -ffast-math,4,100.0
+"compiler flag (C, float, [0,1])",-O2 -ffast-math,5,100.0
+"generator (Python, [0,1])",random() natif,1,82.8345
+"generator (Python, [0,1])",random() natif,2,82.7295
+"generator (Python, [0,1])",random() natif,3,82.8622
+"generator (Python, [0,1])",random() natif,4,82.7835
+"generator (Python, [0,1])",random() natif,5,82.7803
+"generator (Python, [0,1])",entier/(2^31-1) comme rand()/RAND_MAX,1,74.4974
+"generator (Python, [0,1])",entier/(2^31-1) comme rand()/RAND_MAX,2,74.6407
+"generator (Python, [0,1])",entier/(2^31-1) comme rand()/RAND_MAX,3,74.5472
+"generator (Python, [0,1])",entier/(2^31-1) comme rand()/RAND_MAX,4,74.6328
+"generator (Python, [0,1])",entier/(2^31-1) comme rand()/RAND_MAX,5,74.4822
+"type (C, [-1e15,1e15])",float,1,92.0699
+"type (C, [-1e15,1e15])",float,2,92.0806
+"type (C, [-1e15,1e15])",float,3,92.0825
+"type (C, [-1e15,1e15])",float,4,92.0716
+"type (C, [-1e15,1e15])",float,5,92.0816
+"type (C, [-1e15,1e15])",double,1,93.0276
+"type (C, [-1e15,1e15])",double,2,93.0041
+"type (C, [-1e15,1e15])",double,3,93.0119
+"type (C, [-1e15,1e15])",double,4,93.009
+"type (C, [-1e15,1e15])",double,5,93.026
+"interval (C, float)","[0,1]",1,74.5608
+"interval (C, float)","[0,1]",2,74.6885
+"interval (C, float)","[0,1]",3,74.574
+"interval (C, float)","[0,1]",4,74.6619
+"interval (C, float)","[0,1]",5,74.586
+"interval (C, float)","[-1,1]",1,93.0541
+"interval (C, float)","[-1,1]",2,93.0536
+"interval (C, float)","[-1,1]",3,93.043
+"interval (C, float)","[-1,1]",4,93.0655
+"interval (C, float)","[-1,1]",5,93.0381
